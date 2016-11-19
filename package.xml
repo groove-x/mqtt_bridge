@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mqtt_bridge</name>
+  <version>0.1.0</version>
+  <description>The mqtt_bridge package</description>
+
+  <maintainer email="dev@groove-x.com">GROOVE X Development Team</maintainer>
+
+  <license>Proprietary</license>
+
+  <url type="website">https://bitbucket.org/groove-x/mqtt_bridge</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>rosbridge_library</depend>
+
+  <export>
+  </export>
+</package>
