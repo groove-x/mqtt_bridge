@@ -5,6 +5,7 @@ import inject
 import paho.mqtt.client as mqtt
 import rospy
 
+from .bridge import create_bridge
 from .util import lookup_object
 
 
@@ -22,6 +23,7 @@ def mqtt_bridge_node():
     params = rospy.get_param("~", {})
     mqtt_params = params.pop("mqtt", {})
     conn_params = mqtt_params.pop("connection")
+    bridge_params = params.get("bridge", [])
 
     # create mqtt client
     mqtt_client_factory_name = rospy.get_param(
@@ -33,10 +35,17 @@ def mqtt_bridge_node():
     config = create_config(mqtt_client)
     inject.configure(config)
 
-    # configure and start MQTT Client
+    # configure and connect to MQTT broker
     mqtt_client.on_connect = _on_connect
     mqtt_client.on_disconnect = _on_disconnect
     mqtt_client.connect(**conn_params)
+
+    # configure bridges
+    bridges = []
+    for bridge_args in bridge_params:
+        bridges.append(create_bridge(**bridge_args))
+
+    # start MQTT loop
     mqtt_client.loop_start()
 
     # register shutdown callback and spin

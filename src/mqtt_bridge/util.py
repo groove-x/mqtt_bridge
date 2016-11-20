@@ -2,6 +2,10 @@
 from __future__ import absolute_import
 from importlib import import_module
 
+from rosbridge_library.internal.message_conversion import (
+    extract_values, populate_instance,
+)
+
 
 def lookup_object(object_path, package='mqtt_bridge'):
     """ lookup object from a some.module:object_name specification. """
@@ -11,4 +15,4 @@ def lookup_object(object_path, package='mqtt_bridge'):
     return obj
 
 
-__all__ = ['lookup_object']
+__all__ = ['lookup_object', 'extract_values', 'populate_instance']
