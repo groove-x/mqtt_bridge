@@ -1,0 +1,5 @@
+tls:
+  ca_certs: /etc/ssl/certs/Root_CA.pem
+  certfile: /etc/ssl/certs/Client.pem
+  keyfile: /etc/ssl/private/Client.key
+  tls_insecure: true
