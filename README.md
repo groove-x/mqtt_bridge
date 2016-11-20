@@ -75,10 +75,10 @@ bridge:
   - factory: "mqtt_bridge.bridge:RosToMqttBridge"
     msg_type: "std_msgs.msg:Bool"
     topic_from: "/ping"
-    topic_to: "/ping"
+    topic_to: "ping"
   - factory: "mqtt_bridge.bridge:MqttToRosBridge"
     msg_type: "std_msgs.msg:Bool"
-    topic_from: "/ping"
+    topic_from: "ping"
     topic_to: "/pong"
 ```
 
@@ -129,10 +129,10 @@ bridge:
   - factory: "mqtt_bridge.bridge:RosToMqttBridge"
     msg_type: "std_msgs.msg:Bool"
     topic_from: "/ping"
-    topic_to: "/ping"
+    topic_to: "ping"
   - factory: "mqtt_bridge.bridge:MqttToRosBridge"
     msg_type: "std_msgs.msg:Bool"
-    topic_from: "/ping"
+    topic_from: "ping"
     topic_to: "/pong"
 ```
 
