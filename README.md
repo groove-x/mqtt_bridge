@@ -7,12 +7,60 @@ mqtt_bridge provides a functionality to bridge between ROS and MQTT in bidirecti
 
 `mqtt_bridge` uses ROS message as its protocol. Messages from ROS are selialized by json (or messagepack) for MQTT, and messages from MQTT are deselialized for ROS topic. So MQTT messages should be ROS message compatible. (We use `rosbridge_library.internal.message_conversion` for message conversion.)
 
-However, this limitation can be overcome by defining custom bridge class as described later.
+This limitation can be overcome by defining custom bridge class, though.
 
+
+## Demo
+
+### prepare MQTT broker and client
+
+```
+$ sudo apt-get install mosquitto mosquitto-clients
+```
+
+### launch node
+
+``` bash
+$ roslaunch mqtt_bridge demo.launch
+```
+
+Publish to `/ping`,
+
+```
+$ rostopic pub /ping std_msgs/Bool "data: true"
+```
+
+and see response to `/pong`.
+
+```
+$ rostopic echo /pong
+data: True
+---
+```
+
+Publish "hello" to `/echo`,
+
+```
+$ rostopic pub /echo std_msgs/String "data: 'hello'"
+```
+
+and see response to `/back`.
+
+```
+$ rostopic echo /back
+data: hello
+---
+```
+
+You can also see MQTT messages using `mosquitto_sub`
+
+```
+$ mosquitto_sub -t '#'
+```
 
 ## Usage
 
-Prepare parameter file (config.yaml).
+parameter file (config.yaml):
 
 ``` yaml
 mqtt:
@@ -34,7 +82,7 @@ bridge:
     topic_to: "/pong"
 ```
 
-and launch mqtt_bridge_node with these parameters.
+launch file:
 
 ``` xml
 <launch>
@@ -93,7 +141,7 @@ bridge:
 * `topic_from`: topic incoming from (ROS or MQTT)
 * `topic_to`: topic outgoing to (ROS or MQTT)
 
-Also, you can create custom bridge class by inheriting `mqtt_brige.bridge.Bridge` and specify it in config.
+Also, you can create custom bridge class by inheriting `mqtt_brige.bridge.Bridge`.
 
 
 ## License
