@@ -6,7 +6,7 @@
 
   <maintainer email="dev@groove-x.com">GROOVE X Development Team</maintainer>
 
-  <license>Proprietary</license>
+  <license>MIT</license>
 
   <url type="website">https://bitbucket.org/groove-x/mqtt_bridge</url>
 
