@@ -1,0 +1,13 @@
+mqtt:
+  client:
+    protocol: 4      # MQTTv311
+  tls:
+    ca_cert: /etc/ssl/certs/Root_CA.pem
+    certfile: /etc/ssl/certs/Client.pem
+    keyfile: /etc/ssl/private/Client.key
+  tls_insecure:
+    tls_insecure: true
+  connection:
+    host: localhost
+    port: 1883
+    keepalive: 60
