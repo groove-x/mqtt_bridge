@@ -72,14 +72,14 @@ mqtt:
     keepalive: 60
 bridge:
   # ping pong
-  - factory: "mqtt_bridge.bridge:RosToMqttBridge"
-    msg_type: "std_msgs.msg:Bool"
-    topic_from: "/ping"
-    topic_to: "ping"
-  - factory: "mqtt_bridge.bridge:MqttToRosBridge"
-    msg_type: "std_msgs.msg:Bool"
-    topic_from: "ping"
-    topic_to: "/pong"
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:Bool
+    topic_from: /ping
+    topic_to: ping
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: std_msgs.msg:Bool
+    topic_from: ping
+    topic_to: /pong
 ```
 
 launch file:
@@ -115,8 +115,8 @@ See `mqtt_bridge.mqtt_client` for detail.
 `mqtt_bridge` uses `json` as a selializer in default. But you can also configure other selializers. For example, if you want to use messagepack for selialization, add following configuration.
 
 ``` yaml
-selializer: "msgpack:dumps"
-deselializer: "msgpack:loads"
+selializer: msgpack:dumps
+deselializer: msgpack:loads
 ```
 
 ### bridges
@@ -126,14 +126,14 @@ You can list ROS <--> MQTT tranfer specifications in following format.
 ``` yaml
 bridge:
   # ping pong
-  - factory: "mqtt_bridge.bridge:RosToMqttBridge"
-    msg_type: "std_msgs.msg:Bool"
-    topic_from: "/ping"
-    topic_to: "ping"
-  - factory: "mqtt_bridge.bridge:MqttToRosBridge"
-    msg_type: "std_msgs.msg:Bool"
-    topic_from: "ping"
-    topic_to: "/pong"
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:Bool
+    topic_from: /ping
+    topic_to: ping
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: std_msgs.msg:Bool
+    topic_from: ping
+    topic_to: /pong
 ```
 
 * `factory`: bridge class for transfering message from ROS to MQTT, and vise versa.

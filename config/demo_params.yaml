@@ -5,24 +5,24 @@ mqtt:
     host: localhost
     port: 1883
     keepalive: 60
-selializer: "msgpack:dumps"
-deselializer: "msgpack:loads"
+selializer: msgpack:dumps
+deselializer: msgpack:loads
 bridge:
   # ping pong
-  - factory: "mqtt_bridge.bridge:RosToMqttBridge"
-    msg_type: "std_msgs.msg:Bool"
-    topic_from: "/ping"
-    topic_to: "ping"
-  - factory: "mqtt_bridge.bridge:MqttToRosBridge"
-    msg_type: "std_msgs.msg:Bool"
-    topic_from: "ping"
-    topic_to: "/pong"
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:Bool
+    topic_from: /ping
+    topic_to: ping
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: std_msgs.msg:Bool
+    topic_from: ping
+    topic_to: /pong
   # echo back
-  - factory: "mqtt_bridge.bridge:RosToMqttBridge"
-    msg_type: "std_msgs.msg:String"
-    topic_from: "/echo"
-    topic_to: "echo"
-  - factory: "mqtt_bridge.bridge:MqttToRosBridge"
-    msg_type: "std_msgs.msg:String"
-    topic_from: "echo"
-    topic_to: "/back"
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:String
+    topic_from: /echo
+    topic_to: echo
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: std_msgs.msg:String
+    topic_from: echo
+    topic_to: /back
