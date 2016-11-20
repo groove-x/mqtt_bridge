@@ -9,8 +9,14 @@ from .bridge import create_bridge
 from .util import lookup_object
 
 
-def create_config(mqtt_client):
+def create_config(mqtt_client, selializer, deselializer):
+    if isinstance(selializer, basestring):
+        selializer = lookup_object(selializer)
+    if isinstance(deselializer, basestring):
+        deselializer = lookup_object(deselializer)
     def config(binder):
+        binder.bind('selializer', selializer)
+        binder.bind('deselializer', deselializer)
         binder.bind(mqtt.Client, mqtt_client)
     return config
 
@@ -31,8 +37,12 @@ def mqtt_bridge_node():
     mqtt_client_factory = lookup_object(mqtt_client_factory_name)
     mqtt_client = mqtt_client_factory(mqtt_params)
 
+    # load serializer and deselializer
+    selializer = params.get('selializer', 'json:dumps')
+    deselializer = params.get('deselializer', 'json:loads')
+
     # dependency injection
-    config = create_config(mqtt_client)
+    config = create_config(mqtt_client, selializer, deselializer)
     inject.configure(config)
 
     # configure and connect to MQTT broker

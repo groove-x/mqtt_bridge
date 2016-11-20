@@ -1,5 +1,5 @@
 <launch>
   <node name="mqtt_bridge" pkg="mqtt_bridge" type="mqtt_bridge_node.py" output="screen">
-    <rosparam file="$(find mqtt_bridge)/config/demo_ping_pong_params.yaml" command="load" />
+    <rosparam file="$(find mqtt_bridge)/config/demo_params.yaml" command="load" />
   </node>
 </launch>

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-import json
 from abc import ABCMeta, abstractmethod
 
 import inject
@@ -36,8 +35,17 @@ def create_bridge(factory, msg_type, topic_from, topic_to, **kwargs):
 
 
 class Bridge(object):
-    u""" Bridge base class """
+    u""" Bridge base class
+
+    :param mqtt.Client _mqtt_client: MQTT client
+    :param _selialize: message selialize callable
+    :param _deselialize: message deselialize callable
+    """
     __metaclass__ = ABCMeta
+
+    _mqtt_client = inject.attr(mqtt.Client)
+    _selialize = inject.attr('selializer')
+    _deselialize = inject.attr('deselializer')
 
 
 class RosToMqttBridge(Bridge):
@@ -48,7 +56,6 @@ class RosToMqttBridge(Bridge):
     :param class msg_type: subclass of ROS Message
     :param (float|None) frequency: publish frequency
     """
-    _mqtt_client = inject.attr(mqtt.Client)
 
     def __init__(self, topic_from, topic_to, msg_type, frequency=None):
         self._topic_from = topic_from
@@ -58,13 +65,14 @@ class RosToMqttBridge(Bridge):
         rospy.Subscriber(topic_from, msg_type, self._callback_ros)
 
     def _callback_ros(self, msg):
+        rospy.logdebug("ROS received from {}".format(self._topic_from))
         now = rospy.get_time()
         if now - self._last_published > self._interval:
             self._publish(msg)
             self._last_published = now
 
     def _publish(self, msg):
-        payload = json.dumps(extract_values(msg))
+        payload = bytearray(self._selialize(extract_values(msg)))
         self._mqtt_client.publish(topic=self._topic_to, payload=payload)
 
 
@@ -77,7 +85,6 @@ class MqttToRosBridge(Bridge):
     :param (float|None) frequency: publish frequency
     :param int queue_size: ROS publisher's queue size
     """
-    _mqtt_client = inject.attr(mqtt.Client)
 
     def __init__(self, topic_from, topic_to, msg_type, frequency=None,
                  queue_size=10):
@@ -90,6 +97,8 @@ class MqttToRosBridge(Bridge):
 
         self._mqtt_client.subscribe(topic_from)
         self._mqtt_client.message_callback_add(topic_from, self._callback_mqtt)
+        self._publisher = rospy.Publisher(
+            self._topic_to, self._msg_type, queue_size=self._queue_size)
 
     def _callback_mqtt(self, client, userdata, mqtt_msg):
         u""" callback from MQTT
@@ -98,11 +107,11 @@ class MqttToRosBridge(Bridge):
         :param userdata: user defined data
         :param mqtt.MQTTMessage mqtt_msg: MQTT message
         """
+        rospy.logdebug("MQTT received from {}".format(mqtt_msg.topic))
         now = rospy.get_time()
-        if now - self._last_published > self._interval:
+        if now - self._last_published >= self._interval:
             ros_msg = self._create_ros_message(mqtt_msg)
-            publisher = self._get_publisher(mqtt_msg)
-            publisher.publish(ros_msg)
+            self._publisher.publish(ros_msg)
             self._last_published = now
 
     def _create_ros_message(self, mqtt_msg):
@@ -111,15 +120,8 @@ class MqttToRosBridge(Bridge):
         :param mqtt.Message mqtt_msg: MQTT Message
         :return rospy.Message: ROS Message
         """
-        msg_dict = json.loads(mqtt_msg.payload)
+        msg_dict = self._deselialize(mqtt_msg.payload)
         return populate_instance(msg_dict, self._msg_type())
-
-    def _get_publisher(self, mqtt_msg):
-        u""" generate ROS publisher """
-        if not hasattr(self, '_publisher'):
-            self._publisher = rospy.Publisher(
-                self._topic_to, self._msg_type, queue_size=self._queue_size)
-        return self._publisher
 
 
 __all__ = ['register_bridge_factory', 'create_bridge', 'Bridge',
