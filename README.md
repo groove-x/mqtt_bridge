@@ -110,6 +110,10 @@ Parameters under `mqtt` section are used for creating paho's `mqtt.Client` and i
 
 See `mqtt_bridge.mqtt_client` for detail.
 
+### mqtt private path
+
+If `mqtt/private_path` parameter is set, leading `~/` in MQTT topic path will be replaced by this value. For example, if `mqtt/pivate_path` is set as "device/001", MQTT path "~/value" will be converted to "device/001/value".
+
 ### selializer and deselializer
 
 `mqtt_bridge` uses `json` as a selializer in default. But you can also configure other selializers. For example, if you want to use messagepack for selialization, add following configuration.

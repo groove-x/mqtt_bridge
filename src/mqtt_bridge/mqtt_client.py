@@ -53,4 +53,12 @@ def default_mqtt_client_factory(params):
     return client
 
 
-__all__ = ["default_mqtt_client_factory"]
+def create_private_path_extractor(mqtt_private_path):
+    def extractor(topic_path):
+        if topic_path.startswith('~/'):
+            return '{}/{}'.format(mqtt_private_path, topic_path[2:])
+        return topic_path
+    return extractor
+
+
+__all__ = ['default_mqtt_client_factory', 'create_private_path_extractor']

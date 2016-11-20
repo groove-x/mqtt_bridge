@@ -6,18 +6,21 @@ import paho.mqtt.client as mqtt
 import rospy
 
 from .bridge import create_bridge
+from .mqtt_client import create_private_path_extractor
 from .util import lookup_object
 
 
-def create_config(mqtt_client, selializer, deselializer):
+def create_config(mqtt_client, selializer, deselializer, mqtt_private_path):
     if isinstance(selializer, basestring):
         selializer = lookup_object(selializer)
     if isinstance(deselializer, basestring):
         deselializer = lookup_object(deselializer)
+    private_path_extractor = create_private_path_extractor(mqtt_private_path)
     def config(binder):
         binder.bind('selializer', selializer)
         binder.bind('deselializer', deselializer)
         binder.bind(mqtt.Client, mqtt_client)
+        binder.bind('mqtt_private_path_extractor', private_path_extractor)
     return config
 
 
@@ -29,6 +32,7 @@ def mqtt_bridge_node():
     params = rospy.get_param("~", {})
     mqtt_params = params.pop("mqtt", {})
     conn_params = mqtt_params.pop("connection")
+    mqtt_private_path = mqtt_params.pop("private_path", "")
     bridge_params = params.get("bridge", [])
 
     # create mqtt client
@@ -42,7 +46,8 @@ def mqtt_bridge_node():
     deselializer = params.get('deselializer', 'json:loads')
 
     # dependency injection
-    config = create_config(mqtt_client, selializer, deselializer)
+    config = create_config(
+        mqtt_client, selializer, deselializer, mqtt_private_path)
     inject.configure(config)
 
     # configure and connect to MQTT broker

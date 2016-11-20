@@ -46,6 +46,7 @@ class Bridge(object):
     _mqtt_client = inject.attr(mqtt.Client)
     _selialize = inject.attr('selializer')
     _deselialize = inject.attr('deselializer')
+    _extract_private_path = inject.attr('mqtt_private_path_extractor')
 
 
 class RosToMqttBridge(Bridge):
@@ -59,7 +60,7 @@ class RosToMqttBridge(Bridge):
 
     def __init__(self, topic_from, topic_to, msg_type, frequency=None):
         self._topic_from = topic_from
-        self._topic_to = topic_to
+        self._topic_to = self._extract_private_path(topic_to)
         self._last_published = rospy.get_time()
         self._interval = 0 if frequency is None else 1.0 / frequency
         rospy.Subscriber(topic_from, msg_type, self._callback_ros)
@@ -88,7 +89,7 @@ class MqttToRosBridge(Bridge):
 
     def __init__(self, topic_from, topic_to, msg_type, frequency=None,
                  queue_size=10):
-        self._topic_from = topic_from
+        self._topic_from = self._extract_private_path(topic_from)
         self._topic_to = topic_to
         self._msg_type = msg_type
         self._queue_size = queue_size
