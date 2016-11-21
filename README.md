@@ -5,7 +5,7 @@ mqtt_bridge provides a functionality to bridge between ROS and MQTT in bidirecti
 
 ## Principle
 
-`mqtt_bridge` uses ROS message as its protocol. Messages from ROS are selialized by json (or messagepack) for MQTT, and messages from MQTT are deselialized for ROS topic. So MQTT messages should be ROS message compatible. (We use `rosbridge_library.internal.message_conversion` for message conversion.)
+`mqtt_bridge` uses ROS message as its protocol. Messages from ROS are serialized by json (or messagepack) for MQTT, and messages from MQTT are deserialized for ROS topic. So MQTT messages should be ROS message compatible. (We use `rosbridge_library.internal.message_conversion` for message conversion.)
 
 This limitation can be overcome by defining custom bridge class, though.
 
@@ -114,13 +114,13 @@ See `mqtt_bridge.mqtt_client` for detail.
 
 If `mqtt/private_path` parameter is set, leading `~/` in MQTT topic path will be replaced by this value. For example, if `mqtt/pivate_path` is set as "device/001", MQTT path "~/value" will be converted to "device/001/value".
 
-### selializer and deselializer
+### serializer and deserializer
 
-`mqtt_bridge` uses `json` as a selializer in default. But you can also configure other selializers. For example, if you want to use messagepack for selialization, add following configuration.
+`mqtt_bridge` uses `json` as a serializer in default. But you can also configure other serializers. For example, if you want to use messagepack for serialization, add following configuration.
 
 ``` yaml
-selializer: msgpack:dumps
-deselializer: msgpack:loads
+serializer: msgpack:dumps
+deserializer: msgpack:loads
 ```
 
 ### bridges

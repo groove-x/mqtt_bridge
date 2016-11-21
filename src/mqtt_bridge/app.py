@@ -10,15 +10,15 @@ from .mqtt_client import create_private_path_extractor
 from .util import lookup_object
 
 
-def create_config(mqtt_client, selializer, deselializer, mqtt_private_path):
-    if isinstance(selializer, basestring):
-        selializer = lookup_object(selializer)
-    if isinstance(deselializer, basestring):
-        deselializer = lookup_object(deselializer)
+def create_config(mqtt_client, serializer, deserializer, mqtt_private_path):
+    if isinstance(serializer, basestring):
+        serializer = lookup_object(serializer)
+    if isinstance(deserializer, basestring):
+        deserializer = lookup_object(deserializer)
     private_path_extractor = create_private_path_extractor(mqtt_private_path)
     def config(binder):
-        binder.bind('selializer', selializer)
-        binder.bind('deselializer', deselializer)
+        binder.bind('serializer', serializer)
+        binder.bind('deserializer', deserializer)
         binder.bind(mqtt.Client, mqtt_client)
         binder.bind('mqtt_private_path_extractor', private_path_extractor)
     return config
@@ -41,13 +41,13 @@ def mqtt_bridge_node():
     mqtt_client_factory = lookup_object(mqtt_client_factory_name)
     mqtt_client = mqtt_client_factory(mqtt_params)
 
-    # load serializer and deselializer
-    selializer = params.get('selializer', 'json:dumps')
-    deselializer = params.get('deselializer', 'json:loads')
+    # load serializer and deserializer
+    serializer = params.get('serializer', 'json:dumps')
+    deserializer = params.get('deserializer', 'json:loads')
 
     # dependency injection
     config = create_config(
-        mqtt_client, selializer, deselializer, mqtt_private_path)
+        mqtt_client, serializer, deserializer, mqtt_private_path)
     inject.configure(config)
 
     # configure and connect to MQTT broker

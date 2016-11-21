@@ -38,14 +38,14 @@ class Bridge(object):
     u""" Bridge base class
 
     :param mqtt.Client _mqtt_client: MQTT client
-    :param _selialize: message selialize callable
-    :param _deselialize: message deselialize callable
+    :param _serialize: message serialize callable
+    :param _deserialize: message deserialize callable
     """
     __metaclass__ = ABCMeta
 
     _mqtt_client = inject.attr(mqtt.Client)
-    _selialize = inject.attr('selializer')
-    _deselialize = inject.attr('deselializer')
+    _serialize = inject.attr('serializer')
+    _deserialize = inject.attr('deserializer')
     _extract_private_path = inject.attr('mqtt_private_path_extractor')
 
 
@@ -73,7 +73,7 @@ class RosToMqttBridge(Bridge):
             self._last_published = now
 
     def _publish(self, msg):
-        payload = bytearray(self._selialize(extract_values(msg)))
+        payload = bytearray(self._serialize(extract_values(msg)))
         self._mqtt_client.publish(topic=self._topic_to, payload=payload)
 
 
@@ -121,7 +121,7 @@ class MqttToRosBridge(Bridge):
         :param mqtt.Message mqtt_msg: MQTT Message
         :return rospy.Message: ROS Message
         """
-        msg_dict = self._deselialize(mqtt_msg.payload)
+        msg_dict = self._deserialize(mqtt_msg.payload)
         return populate_instance(msg_dict, self._msg_type())
 
 
