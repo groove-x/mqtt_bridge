@@ -4,7 +4,8 @@
   <version>0.1.0</version>
   <description>The mqtt_bridge package</description>
 
-  <maintainer email="dev@groove-x.com">GROOVE X Development Team</maintainer>
+  <author email="junya.hayashi@groove-x.com">Junya Hayashi</author>
+  <maintainer email="junya.hayashi@groove-x.com">Junya Hayashi</maintainer>
 
   <license>MIT</license>
 
