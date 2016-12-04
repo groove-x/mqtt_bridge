@@ -1,39 +1,20 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mqtt_bridge)
 
-find_package(catkin REQUIRED COMPONENTS
-  rospy
-  rosbridge_library
-)
-
+find_package(catkin REQUIRED)
 catkin_python_setup()
+catkin_package()
 
-catkin_package(
-)
-
-###########
-## Build ##
-###########
-
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
-
-#############
-## Install ##
-#############
 
 install(PROGRAMS
-  scripts/mqtt_bridge_node.py.py
+  scripts/mqtt_bridge_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY launch config
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION} USE_SOURCE_PERMISSIONS
+install(DIRECTORY launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
 
-#############
-## Testing ##
-#############
-
-# catkin_add_nosetests(test)
+install(DIRECTORY config
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
+)
