@@ -4,8 +4,7 @@ Changelog for package mqtt_bridge
 
 Forthcoming
 -----------
-* Comment out catkin_add_nosetests in CMakeLists.txt
-* Contributors: Junya Hayashi
+* Fix CMakeLists.txt and package.xml
 
 0.1.1 (2016-12-04)
 ------------------
