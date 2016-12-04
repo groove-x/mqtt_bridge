@@ -36,4 +36,4 @@ install(DIRECTORY launch config
 ## Testing ##
 #############
 
-catkin_add_nosetests(test)
+# catkin_add_nosetests(test)
