@@ -2,8 +2,8 @@
 Changelog for package mqtt_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.4 (2016-12-06)
+------------------
 * Comment out python-msgpack in package.xml
 
 0.1.3 (2016-12-06)
