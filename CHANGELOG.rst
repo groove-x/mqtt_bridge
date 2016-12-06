@@ -2,6 +2,10 @@
 Changelog for package mqtt_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Improve declaring python dependencies
+
 0.1.2 (2016-12-04)
 ------------------
 * Fix CMakeLists.txt and package.xml
