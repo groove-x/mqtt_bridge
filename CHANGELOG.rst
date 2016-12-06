@@ -2,8 +2,8 @@
 Changelog for package mqtt_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2016-12-06)
+------------------
 * Improve declaring python dependencies
 
 0.1.2 (2016-12-04)
