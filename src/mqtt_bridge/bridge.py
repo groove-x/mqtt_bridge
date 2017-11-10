@@ -94,7 +94,7 @@ class MqttToRosBridge(Bridge):
         self._msg_type = msg_type
         self._queue_size = queue_size
         self._last_published = rospy.get_time()
-        self._interval = 0 if frequency is None else 1.0 / frequency
+        self._interval = None if frequency is None else 1.0 / frequency
 
         self._mqtt_client.subscribe(topic_from)
         self._mqtt_client.message_callback_add(topic_from, self._callback_mqtt)
@@ -110,7 +110,8 @@ class MqttToRosBridge(Bridge):
         """
         rospy.logdebug("MQTT received from {}".format(mqtt_msg.topic))
         now = rospy.get_time()
-        if now - self._last_published >= self._interval:
+
+        if self._interval is None or now - self._last_published >= self._interval:
             ros_msg = self._create_ros_message(mqtt_msg)
             self._publisher.publish(ros_msg)
             self._last_published = now
