@@ -112,9 +112,12 @@ class MqttToRosBridge(Bridge):
         now = rospy.get_time()
 
         if self._interval is None or now - self._last_published >= self._interval:
-            ros_msg = self._create_ros_message(mqtt_msg)
-            self._publisher.publish(ros_msg)
-            self._last_published = now
+            try:
+                ros_msg = self._create_ros_message(mqtt_msg)
+                self._publisher.publish(ros_msg)
+                self._last_published = now
+            except Exception as e:
+                rospy.logerr(e)
 
     def _create_ros_message(self, mqtt_msg):
         u""" create ROS message from MQTT payload
