@@ -2,12 +2,12 @@ mqtt:
   client:
     protocol: 4      # MQTTv311
   connection:
-    host: localhost
+    host: 192.168.1.100
     port: 1883
     keepalive: 60
   private_path: device/001
-serializer: msgpack:dumps
-deserializer: msgpack:loads
+# serializer: msgpack:dumps
+# deserializer: msgpack:loads
 bridge:
   # ping pong
   - factory: mqtt_bridge.bridge:RosToMqttBridge
@@ -36,3 +36,13 @@ bridge:
     msg_type: std_msgs.msg:String
     topic_from: ~/echo
     topic_to: /private/back
+# /ardu_in
+
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:String
+    topic_from: /warning_light
+    topic_to: warning_light
+  # - factory: mqtt_bridge.bridge:MqttToRosBridge
+  #   msg_type: std_msgs.msg:String
+  #   topic_from: /status
+  #   topic_to: status
