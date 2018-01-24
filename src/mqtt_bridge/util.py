@@ -32,8 +32,28 @@ def monkey_patch_message_conversion():
 
 
 monkey_patch_message_conversion()
-extract_values = message_conversion.extract_values
-populate_instance = message_conversion.populate_instance
+
+
+def extract_values(inst):
+    import rospy
+    if isinstance(inst, rospy.Time):
+        rostype = "time"
+    elif hasattr(inst, "_type"):
+        rostype = getattr(inst, "_type", None)
+    else:
+        raise InvalidMessageException()
+    return message_conversion._from_inst(inst, rostype)
+
+
+def populate_instance(msg, inst):
+    import rospy
+    if isinstance(inst, rospy.Time):
+        rostype = "time"
+    elif hasattr(inst, "_type"):
+        rostype = getattr(inst, "_type", None)
+    else:
+        raise message_conversion.InvalidMessageException(inst)
+    return message_conversion._to_inst(msg, rostype, rostype, inst)
 
 
 __all__ = ['lookup_object', 'extract_values', 'populate_instance']
