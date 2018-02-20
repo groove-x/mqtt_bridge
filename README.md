@@ -18,6 +18,12 @@ This limitation can be overcome by defining custom bridge class, though.
 $ sudo apt-get install mosquitto mosquitto-clients
 ```
 
+### Install python modules
+
+```bash
+$ pip install -r requirements.txt
+```
+
 ### launch node
 
 ``` bash

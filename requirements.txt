@@ -1,3 +1,4 @@
+bson>=0.5.2
 inject>=3.3.1
 paho-mqtt>=1.2
 msgpack-python>=0.4.8
