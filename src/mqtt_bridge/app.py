@@ -52,14 +52,12 @@ def mqtt_bridge_node():
     inject.configure(config)
 
     # configure and connect to MQTT broker
-    mqtt_client.on_connect = _on_connect
+    bridges = []
+    mqtt_client.on_connect = _on_connect_wrapper(bridges, bridge_params)
     mqtt_client.on_disconnect = _on_disconnect
     mqtt_client.connect(**conn_params)
 
     # configure bridges
-    bridges = []
-    for bridge_args in bridge_params:
-        bridges.append(create_bridge(**bridge_args))
 
     # start MQTT loop
     mqtt_client.loop_start()
@@ -70,9 +68,13 @@ def mqtt_bridge_node():
     rospy.on_shutdown(mqtt_client.loop_stop)
     rospy.spin()
 
-
-def _on_connect(client, userdata, flags, response_code):
-    rospy.loginfo('MQTT connected')
+def _on_connect_wrapper(bridges, bridge_params):
+    def _on_connect(client, userdata, flags, response_code):
+        rospy.loginfo('MQTT connected')
+        del bridges[:]
+        for bridge_args in bridge_params:
+            bridges.append(create_bridge(**bridge_args))
+    return _on_connect
 
 
 def _on_disconnect(client, userdata, response_code):
