@@ -4,6 +4,22 @@ from importlib import import_module
 
 from rosbridge_library.internal import message_conversion
 
+def match_wildcards(wild_topic, topic):
+    wild_topic = wild_topic.split("/")
+    topic = topic.split("/")
+    result = []
+    hash_wildcard = []
+    while topic:
+        wild_field = wild_topic[0]
+        field = topic.pop(0)
+        if wild_field == "+":
+            result.append(field)
+            wild_topic.pop(0)
+        elif wild_field == "#":
+            hash_wildcard.append(field)
+        else:
+            wild_topic.pop(0)
+    return result, hash_wildcard
 
 def lookup_object(object_path, package='mqtt_bridge'):
     """ lookup object from a some.module:object_name specification. """

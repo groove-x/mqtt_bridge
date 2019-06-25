@@ -3,9 +3,9 @@ import ssl
 
 import paho.mqtt.client as mqtt
 import rospy
+import netifaces
 
-
-def default_mqtt_client_factory(params):
+def default_mqtt_client_factory(params, private_path_extractor):
     u""" MQTT Client factory
 
     :param dict param: configuration parameters
@@ -13,6 +13,9 @@ def default_mqtt_client_factory(params):
     """
     # create client
     client_params = params.get('client', {})
+    if "client_id_from_mac" in client_params:
+        client_params["client_id"] = netifaces.ifaddresses(client_params["client_id_from_mac"])[netifaces.AF_LINK][0]["addr"].replace(":", "")
+        del client_params["client_id_from_mac"]
     client = mqtt.Client(**client_params)
 
     # configure tls
@@ -48,6 +51,8 @@ def default_mqtt_client_factory(params):
     # configure will params
     will_params = params.get('will', {})
     if will_params:
+        if "topic" in will_params:
+            will_params["topic"] = private_path_extractor(will_params["topic"])
         client.will_set(**will_params)
 
     return client
