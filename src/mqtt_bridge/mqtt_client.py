@@ -6,7 +6,7 @@ import rospy
 
 
 def default_mqtt_client_factory(params):
-    u""" MQTT Client factory
+    """ MQTT Client factory
 
     :param dict param: configuration parameters
     :return mqtt.Client: MQTT Client
