@@ -68,7 +68,7 @@ class RosToMqttBridge(Bridge):
     def _callback_ros(self, msg):
         rospy.logdebug("ROS received from {}".format(self._topic_from))
         now = rospy.get_time()
-        if now - self._last_published > self._interval:
+        if now - self._last_published >= self._interval:
             self._publish(msg)
             self._last_published = now
 
