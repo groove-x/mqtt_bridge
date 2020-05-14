@@ -95,9 +95,9 @@ class MqttToRosBridge(Bridge):
         self._queue_size = queue_size
         self._last_published = rospy.get_time()
         self._interval = None if frequency is None else 1.0 / frequency
-
-        self._mqtt_client.subscribe(topic_from)
-        self._mqtt_client.message_callback_add(topic_from, self._callback_mqtt)
+        # Adding the correct topic to subscribe to
+        self._mqtt_client.subscribe(self._topic_from)
+        self._mqtt_client.message_callback_add(self._topic_from, self._callback_mqtt)
         self._publisher = rospy.Publisher(
             self._topic_to, self._msg_type, queue_size=self._queue_size)
 
