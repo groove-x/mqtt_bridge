@@ -56,7 +56,6 @@ def default_mqtt_client_factory(params):
 def create_private_path_extractor(mqtt_private_path):
     def extractor(topic_path):
         if topic_path.startswith('~/'):
-            rospy.logdebug('{}/{}'.format(mqtt_private_path, topic_path[2:]))
             return '{}/{}'.format(mqtt_private_path, topic_path[2:])
         return topic_path
     return extractor
