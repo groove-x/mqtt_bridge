@@ -2,6 +2,14 @@
 Changelog for package mqtt_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.7 (2020-06-21)
+------------------
+* Fix mqtt subscribing to private path (`#27 <https://github.com/groove-x/mqtt_bridge/issues/27>`_)
+* Fix frequency limit (`#26 <https://github.com/groove-x/mqtt_bridge/issues/26>`_)
+* Add bson module in requirements.txt (`#10 <https://github.com/groove-x/mqtt_bridge/issues/10>`_)
+* Fix Bridge not to fall when ros msg cannot be created (`#4 <https://github.com/groove-x/mqtt_bridge/issues/4>`_)
+* Contributors: 5tan, Junya Hayashi, Tomas Cernik, Yuma Mihira, kapilPython
+
 0.1.6 (2017-11-10)
 ------------------
 * fix if frequency is none (`#2 <https://github.com/groove-x/mqtt_bridge/issues/2>`_)
