@@ -124,7 +124,11 @@ class MqttToRosBridge(Bridge):
         :param mqtt.Message mqtt_msg: MQTT Message
         :return rospy.Message: ROS Message
         """
-        msg_dict = self._deserialize(mqtt_msg.payload, raw=False)
+        # Hack to enable both, messagepack and json deserialization.
+        if self._serialize.__name__ == "packb":
+            msg_dict = self._deserialize(mqtt_msg.payload, raw=False)
+        else:
+            msg_dict = self._deserialize(mqtt_msg.payload)
         return populate_instance(msg_dict, self._msg_type())
 
 
