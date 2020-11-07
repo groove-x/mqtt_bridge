@@ -12,7 +12,7 @@ def lookup_object(object_path, package='mqtt_bridge'):
     obj = getattr(module, obj_name)
     return obj
 
-
+""" 
 def monkey_patch_message_conversion():
     """ modify _to_primitive_inst to distinct unicode and str conversion """
     from rosbridge_library.internal.message_conversion import (
@@ -27,9 +27,9 @@ def monkey_patch_message_conversion():
             return msg.decode("utf-8").encode("utf-8", "ignore")
         raise FieldTypeMismatchException(roottype, stack, rostype, msgtype)
     message_conversion._to_primitive_inst = _to_primitive_inst
-
-
-monkey_patch_message_conversion()
+"""
+# Seems like Python3 can work without this patch.
+#monkey_patch_message_conversion()
 extract_values = message_conversion.extract_values
 populate_instance = message_conversion.populate_instance
 

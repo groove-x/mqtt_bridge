@@ -6,8 +6,8 @@ mqtt:
     port: 1883
     keepalive: 60
   private_path: device/001
-serializer: msgpack:dumps
-deserializer: msgpack:loads
+#serializer: json:dumps
+#deserializer: json:loads
 bridge:
   # ping pong
   - factory: mqtt_bridge.bridge:RosToMqttBridge
