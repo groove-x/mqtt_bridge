@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import ssl
-
 import paho.mqtt.client as mqtt
-import rospy
 
 
 def default_mqtt_client_factory(params):

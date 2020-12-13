@@ -129,5 +129,4 @@ class MqttToRosBridge(Bridge):
         return populate_instance(msg_dict, self._msg_type())
 
 
-__all__ = ['register_bridge_factory', 'create_bridge', 'Bridge',
-           'RosToMqttBridge', 'MqttToRosBridge']
+__all__ = ['create_bridge', 'Bridge', 'RosToMqttBridge', 'MqttToRosBridge']
