@@ -1,5 +1,7 @@
 # mqtt_bridge
 
+[![CircleCI](https://circleci.com/gh/groove-x/mqtt_bridge.svg?style=svg)](https://circleci.com/gh/groove-x/mqtt_bridge)
+
 mqtt_bridge provides a functionality to bridge between ROS and MQTT in bidirectional.
 
 
