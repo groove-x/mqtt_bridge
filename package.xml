@@ -12,6 +12,8 @@
   <url>http://www.ros.org/wiki/mqtt_bridge</url>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>python-setuptools</buildtool_depend>
+
   <exec_depend>rospy</exec_depend>
   <exec_depend>rosbridge_library</exec_depend>
   <exec_depend>std_msgs</exec_depend>
