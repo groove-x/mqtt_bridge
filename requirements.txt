@@ -1,4 +1,18 @@
-bson>=0.5.2
-inject>=3.3.1
-paho-mqtt>=1.2
+# thanks to rospypi project, we can install ros packages in pure python
+# See: https://github.com/rospypi/simple
+--extra-index-url https://rospypi.github.io/simple/
+catkin-pkg
+geometry-msgs
+inject>=3.3.1,<4.0
 msgpack-python>=0.4.8
+paho-mqtt>=1.2
+pymongo
+pytest
+pyyaml
+git+https://github.com/RobotWebTools/rosbridge_suite.git#subdirectory=rosbridge_library
+rosgraph-msgs
+roslib
+rosmsg
+rospy<1.15  # 1.15 is for python3
+sensor-msgs
+std-msgs
