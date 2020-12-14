@@ -1,7 +1,7 @@
 .PHONY: setup
 setup:
 	pip install catkin_pkg
-	pip install -r requirements.txt
+	pip install -r dev-requirements.txt
 	pip install -e .
 
 .PHONY: test
