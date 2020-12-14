@@ -90,6 +90,8 @@ bridge:
     topic_to: /pong
 ```
 
+you can use any msg types like `sensor_msgs.msg:Imu`.
+
 launch file:
 
 ``` xml
