@@ -1,5 +1,5 @@
 import threading
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 import pytest
 
