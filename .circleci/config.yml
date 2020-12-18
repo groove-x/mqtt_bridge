@@ -35,16 +35,14 @@ jobs:
           name: configure catkin workspace
           command: |
             mkdir -p ~/catkin_ws/src
-            cd ~/catkin_ws/src
-            ln -s /root/project mqtt_bridge
             cd ~/catkin_ws
+            ln -s /root/project src/mqtt_bridge
             source /opt/ros/melodic/setup.bash
-            catkin_make
-            source devel/setup.bash
             apt update
             rosdep update
             rosdep install --from-paths src --ignore-src -r -y
-            pip install -r src/mqtt_bridge/requirements.txt
+            catkin_make
+            source devel/setup.bash
       - run:
           name: run rostest
           command: |
