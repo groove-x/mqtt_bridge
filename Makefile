@@ -11,3 +11,4 @@ test:
 .PHONY: circleci-local
 circleci-local:
 	circleci local execute --job test
+	circleci local execute --job rostest

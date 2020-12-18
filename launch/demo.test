@@ -1,0 +1,8 @@
+<launch>
+  <arg name="use_tls" default="false" />
+  <node name="mqtt_bridge" pkg="mqtt_bridge" type="mqtt_bridge_node.py" output="screen">
+    <rosparam command="load" file="$(find mqtt_bridge)/config/demo_params.yaml" />
+    <rosparam if="$(arg use_tls)" command="load" ns="mqtt" file="$(find mqtt_bridge)/config/tls_params.yaml" />
+  </node>
+  <test test-name="demo_test" pkg="mqtt_bridge" type="mqtt_bridge_node_test.py"/>
+</launch>
