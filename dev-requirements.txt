@@ -4,15 +4,18 @@
 catkin-pkg
 geometry-msgs
 inject>=3.3.1,<4.0
+mock
 msgpack-python>=0.4.8
 paho-mqtt>=1.2
 pymongo
 pytest
 pyyaml
 git+https://github.com/RobotWebTools/rosbridge_suite.git#subdirectory=rosbridge_library
+rosgraph
 rosgraph-msgs
 roslib
 rosmsg
 rospy<1.15  # 1.15 is for python3
+rostest
 sensor-msgs
 std-msgs
