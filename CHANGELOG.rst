@@ -2,6 +2,11 @@
 Changelog for package mqtt_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix build dependency (`#43 <https://github.com/groove-x/mqtt_bridge/issues/43>`_)
+* Contributors: Junya Hayashi
+
 0.2.0 (2020-12-31)
 ------------------
 * migrate to Python 3 (`#25 <https://github.com/groove-x/mqtt_bridge/issues/25>`_)
