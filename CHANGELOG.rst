@@ -2,6 +2,11 @@
 Changelog for package mqtt_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* migrate to Python 3 (`#25 <https://github.com/groove-x/mqtt_bridge/issues/25>`_)
+* Contributors: Christopher Mayershofer, Junya Hayashi, Yuma Mihira
+
 0.1.8 (2020-12-31)
 ------------------
 * configure rostest and run it on circleci (`#41 <https://github.com/groove-x/mqtt_bridge/issues/41>`_)
