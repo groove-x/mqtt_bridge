@@ -2,8 +2,8 @@
 Changelog for package mqtt_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.8 (2020-12-31)
+------------------
 * configure rostest and run it on circleci (`#41 <https://github.com/groove-x/mqtt_bridge/issues/41>`_)
 * split requirements.txt (`#38 <https://github.com/groove-x/mqtt_bridge/issues/38>`_)
 * add unittests (`#37 <https://github.com/groove-x/mqtt_bridge/issues/37>`_)
