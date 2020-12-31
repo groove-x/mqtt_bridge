@@ -3,13 +3,13 @@ version: 2.1
 executors:
   python:
     docker:
-      - image: cimg/python:2.7
+      - image: cimg/python:3.7
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
   ros:
     docker:
-      - image: ros:melodic
+      - image: ros:noetic
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -37,7 +37,7 @@ jobs:
             mkdir -p ~/catkin_ws/src
             cd ~/catkin_ws
             ln -s /root/project src/mqtt_bridge
-            source /opt/ros/melodic/setup.bash
+            source /opt/ros/noetic/setup.bash
             apt update
             rosdep update
             rosdep install --from-paths src --ignore-src -r -y
@@ -47,9 +47,9 @@ jobs:
           name: run rostest
           command: |
             cd ~/catkin_ws
-            source /opt/ros/melodic/setup.bash
+            source /opt/ros/noetic/setup.bash
             source devel/setup.bash
-            pip install mock
+            pip3 install mock
             rostest mqtt_bridge demo.test
 
 workflows:

@@ -14,16 +14,18 @@ This limitation can be overcome by defining custom bridge class, though.
 
 ## Demo
 
-### prepare MQTT broker and client
+### Prerequisites
 
 ```
-$ sudo apt-get install mosquitto mosquitto-clients
+$ sudo apt install python3-pip
+$ sudo apt install ros-noetic-rosbridge-library
+$ sudo apt install mosquitto mosquitto-clients
 ```
 
 ### Install python modules
 
 ```bash
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 ### launch node
@@ -126,11 +128,11 @@ If `mqtt/private_path` parameter is set, leading `~/` in MQTT topic path will be
 
 ### serializer and deserializer
 
-`mqtt_bridge` uses `json` as a serializer in default. But you can also configure other serializers. For example, if you want to use messagepack for serialization, add following configuration.
+`mqtt_bridge` uses `msgpack` as a serializer by default. But you can also configure other serializers. For example, if you want to use json for serialization, add following configuration.
 
 ``` yaml
-serializer: msgpack:dumps
-deserializer: msgpack:loads
+serializer: json:dumps
+deserializer: json:loads
 ```
 
 ### bridges

@@ -3,7 +3,7 @@
 --extra-index-url https://rospypi.github.io/simple/
 catkin-pkg
 geometry-msgs
-inject>=3.3.1,<4.0
+inject>=4.0
 mock
 msgpack-python>=0.4.8
 paho-mqtt>=1.2

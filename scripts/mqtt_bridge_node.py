@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 import rospy
 
 from mqtt_bridge.app import mqtt_bridge_node

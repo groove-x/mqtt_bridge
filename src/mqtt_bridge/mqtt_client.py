@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
+from typing import Dict, Callable
+
 import paho.mqtt.client as mqtt
 
 
-def default_mqtt_client_factory(params):
-    u""" MQTT Client factory
-
-    :param dict param: configuration parameters
-    :return mqtt.Client: MQTT Client
-    """
+def default_mqtt_client_factory(params: Dict) -> mqtt.Client:
+    """ MQTT Client factory """
     # create client
     client_params = params.get('client', {})
     client = mqtt.Client(**client_params)
@@ -50,7 +47,7 @@ def default_mqtt_client_factory(params):
     return client
 
 
-def create_private_path_extractor(mqtt_private_path):
+def create_private_path_extractor(mqtt_private_path: str) -> Callable[[str], str]:
     def extractor(topic_path):
         if topic_path.startswith('~/'):
             return '{}/{}'.format(mqtt_private_path, topic_path[2:])

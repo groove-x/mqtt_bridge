@@ -1,4 +1,4 @@
-inject>=3.3.1,<4.0
+inject>=4.0
 msgpack-python>=0.4.8
 paho-mqtt>=1.2
 pymongo
