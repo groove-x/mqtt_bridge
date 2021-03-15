@@ -56,13 +56,15 @@ class RosToMqttBridge(Bridge):
     :param str topic_to: outgoing MQTT topic path
     :param class msg_type: subclass of ROS Message
     :param (float|None) frequency: publish frequency
+    :param (function|None) wrap_fn: ROS message wrapping function
     """
 
-    def __init__(self, topic_from, topic_to, msg_type, frequency=None):
+    def __init__(self, topic_from, topic_to, msg_type, frequency=None, wrap_fn=None):
         self._topic_from = topic_from
         self._topic_to = self._extract_private_path(topic_to)
         self._last_published = rospy.get_time()
         self._interval = 0 if frequency is None else 1.0 / frequency
+        self._wrap = self._wrap_passthrough if wrap_fn is None else wrap_fn
         rospy.Subscriber(topic_from, msg_type, self._callback_ros)
 
     def _callback_ros(self, msg):
@@ -73,9 +75,11 @@ class RosToMqttBridge(Bridge):
             self._last_published = now
 
     def _publish(self, msg):
-        payload = bytearray(self._serialize(extract_values(msg)))
+        payload = bytearray(self._serialize(self._wrap(extract_values(msg))))
         self._mqtt_client.publish(topic=self._topic_to, payload=payload)
 
+    def _wrap_passthrough(self, msg):
+        return msg
 
 class MqttToRosBridge(Bridge):
     u""" Bridge from MQTT to ROS topic
@@ -85,16 +89,18 @@ class MqttToRosBridge(Bridge):
     :param class msg_type: subclass of ROS Message
     :param (float|None) frequency: publish frequency
     :param int queue_size: ROS publisher's queue size
+    :param (function|None) unwrap_fn: ROS message unwrapping function
     """
 
     def __init__(self, topic_from, topic_to, msg_type, frequency=None,
-                 queue_size=10):
+                 queue_size=10, unwrap_fn=None):
         self._topic_from = self._extract_private_path(topic_from)
         self._topic_to = topic_to
         self._msg_type = msg_type
         self._queue_size = queue_size
         self._last_published = rospy.get_time()
         self._interval = None if frequency is None else 1.0 / frequency
+        self._unwrap = self._unwrap_passthrough if unwrap_fn is None else unwrap_fn
         # Adding the correct topic to subscribe to
         self._mqtt_client.subscribe(self._topic_from)
         self._mqtt_client.message_callback_add(self._topic_from, self._callback_mqtt)
@@ -125,8 +131,10 @@ class MqttToRosBridge(Bridge):
         :param mqtt.Message mqtt_msg: MQTT Message
         :return rospy.Message: ROS Message
         """
-        msg_dict = self._deserialize(mqtt_msg.payload)
+        msg_dict = self._unwrap(self._deserialize(mqtt_msg.payload))
         return populate_instance(msg_dict, self._msg_type())
 
+    def _unwrap_passthrough(self, msg):
+        return msg
 
 __all__ = ['create_bridge', 'Bridge', 'RosToMqttBridge', 'MqttToRosBridge']
