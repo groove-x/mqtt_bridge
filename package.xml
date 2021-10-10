@@ -18,10 +18,10 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>rosbridge_library</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <!--<exec_depend>python3-msgpack</exec_depend> -->
-  <!--<exec_depend>python3-paho-mqtt</exec_depend> -->
+  <exec_depend>python3-msgpack</exec_depend>
+  <exec_depend>python3-paho-mqtt</exec_depend>
   <exec_depend>python3-pymongo</exec_depend>
-  <!--<exec_depend>python3-inject</exec_depend> -->
+  <exec_depend>python-inject-pip</exec_depend>
 
   <export>
   </export>
