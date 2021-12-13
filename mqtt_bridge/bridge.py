@@ -6,6 +6,7 @@ import paho.mqtt.client as mqtt
 
 from .util import lookup_object, extract_values, populate_instance
 import rclpy
+from rclpy.node import Node
 
 #def create_bridge(factory: Union[str, "Bridge"], msg_type: Union[str, Type[rospy.Message]], topic_from: str,
 def create_bridge(factory: Union[str, "Bridge"], msg_type: str, topic_from: str,
@@ -24,7 +25,7 @@ def create_bridge(factory: Union[str, "Bridge"], msg_type: str, topic_from: str,
             "msg_type should be rospy.Message instance or its string"
             "reprensentation")"""
     return factory(
-        topic_from=topic_from, topic_to=topic_to, msg_type=msg_type, frequency=frequency, **kwargs)
+        topic_from=topic_from, topic_to=topic_to, msg_type=msg_type, frequency=frequency, ros_node=kwargs['ros_node'] ,**kwargs)
 
 
 class Bridge(object, metaclass=ABCMeta):
@@ -40,16 +41,18 @@ class RosToMqttBridge(Bridge):
     bridge ROS messages on `topic_from` to MQTT topic `topic_to`. expect `msg_type` ROS message type.
     """
 
-    def __init__(self, topic_from: str, topic_to: str, msg_type, frequency: Optional[float] = None):
+    def __init__(self, topic_from: str, topic_to: str, msg_type, frequency: Optional[float] = None, **kwargs):
+        self.ros_node = kwargs["ros_node"]
         self._topic_from = topic_from
         self._topic_to = self._extract_private_path(topic_to)
-        self._last_published = rospy.get_time()
+        self._last_published = self.ros_node.get_clock().now()
         self._interval = 0 if frequency is None else 1.0 / frequency
-        rospy.Subscriber(topic_from, msg_type, self._callback_ros)
+        self.ros_node.create_subscription(msg_type,topic_from,self._callback_ros)
+        #rospy.Subscriber(topic_from, msg_type, self._callback_ros)
 
     def _callback_ros(self, msg):
-        rospy.logdebug("ROS received from {}".format(self._topic_from))
-        now = rospy.get_time()
+        self.ros_node.get_logger().debug("ROS received from {}".format(self._topic_from))
+        now = self.ros_node.get_clock().now()
         if now - self._last_published >= self._interval:
             self._publish(msg)
             self._last_published = now
@@ -65,23 +68,24 @@ class MqttToRosBridge(Bridge):
     """
 
     def __init__(self, topic_from: str, topic_to: str, msg_type,
-                 frequency: Optional[float] = None, queue_size: int = 10):
+                 frequency: Optional[float] = None, queue_size: int = 10, **kwargs):
+        self.ros_node = kwargs["ros_node"]
         self._topic_from = self._extract_private_path(topic_from)
         self._topic_to = topic_to
         self._msg_type = msg_type
         self._queue_size = queue_size
-        self._last_published = rospy.get_time()
+        self._last_published = self.ros_node.get_clock().now()
         self._interval = None if frequency is None else 1.0 / frequency
         # Adding the correct topic to subscribe to
         self._mqtt_client.subscribe(self._topic_from)
         self._mqtt_client.message_callback_add(self._topic_from, self._callback_mqtt)
-        self._publisher = rospy.Publisher(
-            self._topic_to, self._msg_type, queue_size=self._queue_size)
+        self._publisher = self.ros_node.create_publisher(
+            self._msg_type, self._topic_to) #, queue_size=self._queue_size)
 
     def _callback_mqtt(self, client: mqtt.Client, userdata: Dict, mqtt_msg: mqtt.MQTTMessage):
         """ callback from MQTT """
-        rospy.logdebug("MQTT received from {}".format(mqtt_msg.topic))
-        now = rospy.get_time()
+        self.ros_node.get_logger().debug("MQTT received from {}".format(mqtt_msg.topic))
+        now = self.ros_node.get_clock().now()
 
         if self._interval is None or now - self._last_published >= self._interval:
             try:
@@ -89,9 +93,9 @@ class MqttToRosBridge(Bridge):
                 self._publisher.publish(ros_msg)
                 self._last_published = now
             except Exception as e:
-                rospy.logerr(e)
+                self.ros_node.get_logger().error(e)
 
-    def _create_ros_message(self, mqtt_msg: mqtt.MQTTMessage) -> rospy.Message:
+    def _create_ros_message(self, mqtt_msg: mqtt.MQTTMessage): #-> rospy.Message
         """ create ROS message from MQTT payload """
         # Hack to enable both, messagepack and json deserialization.
         if self._serialize.__name__ == "packb":
