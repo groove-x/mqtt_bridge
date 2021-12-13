@@ -7,6 +7,7 @@ import paho.mqtt.client as mqtt
 from .util import lookup_object, extract_values, populate_instance
 import rclpy
 from rclpy.node import Node
+from rclpy.duration import Duration
 
 #def create_bridge(factory: Union[str, "Bridge"], msg_type: Union[str, Type[rospy.Message]], topic_from: str,
 def create_bridge(factory: Union[str, "Bridge"], msg_type: str, topic_from: str,
@@ -25,7 +26,7 @@ def create_bridge(factory: Union[str, "Bridge"], msg_type: str, topic_from: str,
             "msg_type should be rospy.Message instance or its string"
             "reprensentation")"""
     return factory(
-        topic_from=topic_from, topic_to=topic_to, msg_type=msg_type, frequency=frequency, ros_node=kwargs['ros_node'] ,**kwargs)
+        topic_from=topic_from, topic_to=topic_to, msg_type=msg_type, frequency=frequency, **kwargs)
 
 
 class Bridge(object, metaclass=ABCMeta):
@@ -46,8 +47,8 @@ class RosToMqttBridge(Bridge):
         self._topic_from = topic_from
         self._topic_to = self._extract_private_path(topic_to)
         self._last_published = self.ros_node.get_clock().now()
-        self._interval = 0 if frequency is None else 1.0 / frequency
-        self.ros_node.create_subscription(msg_type,topic_from,self._callback_ros)
+        self._interval = Duration(seconds=0) if frequency is None else Duration(seconds=(1.0 / frequency))
+        self.ros_node.create_subscription(msg_type, topic_from, self._callback_ros, 10)
         #rospy.Subscriber(topic_from, msg_type, self._callback_ros)
 
     def _callback_ros(self, msg):
@@ -75,12 +76,12 @@ class MqttToRosBridge(Bridge):
         self._msg_type = msg_type
         self._queue_size = queue_size
         self._last_published = self.ros_node.get_clock().now()
-        self._interval = None if frequency is None else 1.0 / frequency
+        self._interval = None if frequency is None else Duration(seconds=(1.0 / frequency))
         # Adding the correct topic to subscribe to
         self._mqtt_client.subscribe(self._topic_from)
         self._mqtt_client.message_callback_add(self._topic_from, self._callback_mqtt)
         self._publisher = self.ros_node.create_publisher(
-            self._msg_type, self._topic_to) #, queue_size=self._queue_size)
+            self._msg_type, self._topic_to, 10) #, queue_size=self._queue_size)
 
     def _callback_mqtt(self, client: mqtt.Client, userdata: Dict, mqtt_msg: mqtt.MQTTMessage):
         """ callback from MQTT """

@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'mqtt_bridge_node = mqtt_bridge.mqtt_bridge_node:main'
         ],
     },
 )

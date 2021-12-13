@@ -43,16 +43,16 @@ def mqtt_bridge_node():
     #params = rospy.get_param("~", {})
     #mqtt_params = params.pop("mqtt", {})
     mqtt_params ={"client" :  
-                    {"protocol" : mqtt_node.get_parameter("mqtt.client.protocol")}
+                    {"protocol" : mqtt_node.get_parameter("mqtt.client.protocol").value}
                 }
     #conn_params = mqtt_params.pop("connection")
-    conn_params = dict(zip(["host","port","keepalive"],
-                            mqtt_node.get_parameters(['mqtt.connection.host',
-                                                    'mqtt.connection.port',
-                                                    'mqtt.connection.keepalive']
-                                                    )
-                                )
-                            )
+
+    conn_Param = mqtt_node.get_parameters(['mqtt.connection.host',
+                                            'mqtt.connection.port',
+                                            'mqtt.connection.keepalive']
+                                        )
+    conn_param_list = [con_par.value for con_par in conn_Param]
+    conn_params = dict(zip(["host","port","keepalive"],conn_param_list))
     #mqtt_private_path = mqtt_params.pop("private_path", "")
     mqtt_private_path = mqtt_node.get_parameter("mqtt.private_path").value
     #bridge_params = params.get("bridge", [])
@@ -101,13 +101,15 @@ def mqtt_bridge_node():
         mqtt_client.disconnect
         mqtt_client.loop_stop
 
+    mqtt_node.destroy_node()
+
 
 def _on_connect(client, userdata, flags, response_code):
-    mqtt_node.loginfo('MQTT connected')
+    mqtt_node.get_logger().info('MQTT connected')
 
 
 def _on_disconnect(client, userdata, response_code):
-    mqtt_node.loginfo('MQTT disconnected')
+    mqtt_node.get_logger().info('MQTT disconnected')
 
 
 __all__ = ['mqtt_bridge_node']
