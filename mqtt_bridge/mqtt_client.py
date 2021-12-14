@@ -7,11 +7,13 @@ def default_mqtt_client_factory(params: Dict) -> mqtt.Client:
     """ MQTT Client factory """
     # create client
     client_params = params.get('client', {})
+    param_to_value(client_params)
     client = mqtt.Client(**client_params)
 
     # configure tls
     tls_params = params.get('tls', {})
     if tls_params:
+        param_to_value(tls_params)
         tls_insecure = tls_params.pop('tls_insecure', False)
         client.tls_set(**tls_params)
         client.tls_insecure_set(tls_insecure)
@@ -19,11 +21,13 @@ def default_mqtt_client_factory(params: Dict) -> mqtt.Client:
     # configure username and password
     account_params = params.get('account', {})
     if account_params:
+        param_to_value(account_params)
         client.username_pw_set(**account_params)
 
     # configure message params
     message_params = params.get('message', {})
     if message_params:
+        param_to_value(message_params)
         inflight = message_params.get('max_inflight_messages')
         if inflight is not None:
             client.max_inflight_messages_set(inflight)
@@ -37,15 +41,20 @@ def default_mqtt_client_factory(params: Dict) -> mqtt.Client:
     # configure userdata
     userdata = params.get('userdata', {})
     if userdata:
+        param_to_value(userdata)
         client.user_data_set(userdata)
 
     # configure will params
     will_params = params.get('will', {})
     if will_params:
+        param_to_value(will_params)
         client.will_set(**will_params)
 
     return client
 
+def param_to_value(param_dict):
+    for key in param_dict.keys():
+        param_dict.update({key : param_dict[key].value})
 
 def create_private_path_extractor(mqtt_private_path: str) -> Callable[[str], str]:
     def extractor(topic_path):

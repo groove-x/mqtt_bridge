@@ -9,12 +9,16 @@ def generate_launch_description():
         'config',
         'demo_params.yaml'
         )
-        
+    '''config1 = os.path.join(
+        get_package_share_directory('mqtt_bridge'),
+        'config',
+        'tls_params.yaml'
+        )'''
     node=Node(
         package = 'mqtt_bridge',
         name = 'mqtt_bridge_node',
         executable = 'mqtt_bridge_node',
-        parameters = [config]
+        parameters = [config] #, config1]
     )
     ld.add_action(node)
     return ld

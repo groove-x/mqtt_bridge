@@ -42,17 +42,19 @@ def mqtt_bridge_node():
 
     #params = rospy.get_param("~", {})
     #mqtt_params = params.pop("mqtt", {})
-    mqtt_params ={"client" :  
-                    {"protocol" : mqtt_node.get_parameter("mqtt.client.protocol").value}
+    mqtt_params ={
+                    "client" :  mqtt_node.get_parameters_by_prefix("mqtt.client"),
+                    "tls" : mqtt_node.get_parameters_by_prefix("mqtt.tls"),
+                    "account" : mqtt_node.get_parameters_by_prefix("mqtt.account"),
+                    "userdata" : mqtt_node.get_parameters_by_prefix("mqtt.userdata"),
+                    "message" : mqtt_node.get_parameters_by_prefix("mqtt.message"),
+                    "will"  : mqtt_node.get_parameters_by_prefix("mqtt.will")
                 }
     #conn_params = mqtt_params.pop("connection")
+    conn_params = mqtt_node.get_parameters_by_prefix("mqtt.connection")
+    for key in conn_params.keys():
+        conn_params.update({key : conn_params[key].value})
 
-    conn_Param = mqtt_node.get_parameters(['mqtt.connection.host',
-                                            'mqtt.connection.port',
-                                            'mqtt.connection.keepalive']
-                                        )
-    conn_param_list = [con_par.value for con_par in conn_Param]
-    conn_params = dict(zip(["host","port","keepalive"],conn_param_list))
     #mqtt_private_path = mqtt_params.pop("private_path", "")
     mqtt_private_path = mqtt_node.get_parameter("mqtt.private_path").value
     #bridge_params = params.get("bridge", [])
