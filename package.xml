@@ -2,10 +2,14 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>mqtt_bridge</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="kapildeshpande041193@gmail.com">kapil</maintainer>
-  <license>TODO: License declaration</license>
+  <version>0.1.1</version>
+  <description>The mqtt_bridge package</description>
+  <author email="junya.hayashi@groove-x.com">Junya Hayashi</author>
+  <author email="kapildeshpande041193@gmail.com">Kapil Deshpande</author>
+  <maintainer email="junya.hayashi@groove-x.com">Junya Hayashi</maintainer>
+  <license>MIT</license>
+
+  <url>http://www.ros.org/wiki/mqtt_bridge</url>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

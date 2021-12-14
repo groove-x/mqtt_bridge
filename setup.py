@@ -6,7 +6,7 @@ package_name = 'mqtt_bridge'
 
 setup(
     name=package_name,
-    version='0.0.0',
+    version='0.1.1',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -17,10 +17,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='kapil',
-    maintainer_email='kapildeshpande041193@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='Kapil Deshpande & Junya Hayashi',
+    maintainer_email='kapildeshpande041193@gmail.com & junya.hayashi@groove-x.com',
+    description='The mqtt_bridge package',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
