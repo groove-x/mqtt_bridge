@@ -1,6 +1,5 @@
 import inject
 import paho.mqtt.client as mqtt
-#import rospy
 import rclpy
 from rclpy.node import Node
 
@@ -24,8 +23,6 @@ def create_config(mqtt_client, serializer, deserializer, mqtt_private_path):
 
 
 def mqtt_bridge_node():
-    # init node
-    #rospy.init_node('mqtt_bridge_node')
     global mqtt_node 
     mqtt_node = Node('mqtt_bridge_node',
                 allow_undeclared_parameters=True,
@@ -40,8 +37,6 @@ def mqtt_bridge_node():
         bridge_param = mqtt_node.get_parameter('bridge.bridge'+bridge_n).value
         bridge_params.append(dict(zip(bridge_dict_keys,bridge_param)))
 
-    #params = rospy.get_param("~", {})
-    #mqtt_params = params.pop("mqtt", {})
     mqtt_params ={
                     "client" :  mqtt_node.get_parameters_by_prefix("mqtt.client"),
                     "tls" : mqtt_node.get_parameters_by_prefix("mqtt.tls"),
@@ -50,18 +45,13 @@ def mqtt_bridge_node():
                     "message" : mqtt_node.get_parameters_by_prefix("mqtt.message"),
                     "will"  : mqtt_node.get_parameters_by_prefix("mqtt.will")
                 }
-    #conn_params = mqtt_params.pop("connection")
     conn_params = mqtt_node.get_parameters_by_prefix("mqtt.connection")
     for key in conn_params.keys():
         conn_params.update({key : conn_params[key].value})
 
-    #mqtt_private_path = mqtt_params.pop("private_path", "")
     mqtt_private_path = mqtt_node.get_parameter("mqtt.private_path").value
-    #bridge_params = params.get("bridge", [])
 
     # create mqtt client
-    #mqtt_client_factory_name = rospy.get_param(
-    #    "~mqtt_client_factory", ".mqtt_client:default_mqtt_client_factory")
     mqtt_client_factory_name = mqtt_node.get_parameter_or(
         "~mqtt_client_factory", ".mqtt_client:default_mqtt_client_factory")
     mqtt_client_factory = lookup_object(mqtt_client_factory_name)
@@ -69,9 +59,7 @@ def mqtt_bridge_node():
 
     # load serializer and deserializer
     serializer = mqtt_node.get_parameter_or('serializer', 'msgpack:dumps')
-    #serializer = params.get('serializer', 'msgpack:dumps')
     deserializer = mqtt_node.get_parameter_or('deserializer', 'msgpack:loads')
-    #deserializer = params.get('deserializer', 'msgpack:loads')
 
     # dependency injection
     config = create_config(
@@ -90,11 +78,6 @@ def mqtt_bridge_node():
 
     # start MQTT loop
     mqtt_client.loop_start()
-
-    # register shutdown callback and spin
-    """rospy.on_shutdown(mqtt_client.disconnect)
-    rospy.on_shutdown(mqtt_client.loop_stop)
-    rospy.spin()"""
 
     try:
         rclpy.spin(mqtt_node)
