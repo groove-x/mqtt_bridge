@@ -9,7 +9,6 @@ import rclpy
 from rclpy.node import Node
 from rclpy.duration import Duration
 
-#def create_bridge(factory: Union[str, "Bridge"], msg_type: Union[str, Type[rospy.Message]], topic_from: str,
 def create_bridge(factory: Union[str, "Bridge"], msg_type: str, topic_from: str,
                   topic_to: str, frequency: Optional[float] = None, **kwargs) -> "Bridge":
     """ generate bridge instance using factory callable and arguments. if `factory` or `msg_type` is provided as string,
@@ -21,7 +20,7 @@ def create_bridge(factory: Union[str, "Bridge"], msg_type: str, topic_from: str,
         raise ValueError("factory should be Bridge subclass")
     if isinstance(msg_type, str):
         msg_type = lookup_object(msg_type)
-    """if not issubclass(msg_type, rospy.Message):
+    """if not issubclass(msg_type, rospy.Message): # replace this with ROS2 once a solution for this esists
         raise TypeError(
             "msg_type should be rospy.Message instance or its string"
             "reprensentation")"""
@@ -49,7 +48,6 @@ class RosToMqttBridge(Bridge):
         self._last_published = self.ros_node.get_clock().now()
         self._interval = Duration(seconds=0) if frequency is None else Duration(seconds=(1.0 / frequency))
         self.ros_node.create_subscription(msg_type, topic_from, self._callback_ros, 10)
-        #rospy.Subscriber(topic_from, msg_type, self._callback_ros)
 
     def _callback_ros(self, msg):
         self.ros_node.get_logger().debug("ROS received from {}".format(self._topic_from))
@@ -96,7 +94,7 @@ class MqttToRosBridge(Bridge):
             except Exception as e:
                 self.ros_node.get_logger().error(e)
 
-    def _create_ros_message(self, mqtt_msg: mqtt.MQTTMessage): #-> rospy.Message
+    def _create_ros_message(self, mqtt_msg: mqtt.MQTTMessage): 
         """ create ROS message from MQTT payload """
         # Hack to enable both, messagepack and json deserialization.
         if self._serialize.__name__ == "packb":

@@ -1,7 +1,6 @@
 from importlib import import_module
 from typing import Any, Callable, Dict
 
-#import rospy no need of this
 from rosbridge_library.internal import message_conversion
 
 def lookup_object(object_path: str, package: str='mqtt_bridge') -> Any:
@@ -15,6 +14,4 @@ def lookup_object(object_path: str, package: str='mqtt_bridge') -> Any:
 extract_values = message_conversion.extract_values  
 populate_instance = message_conversion.populate_instance 
 
-# type: Callable[[rospy.Message], Dict]
-# type: Callable[[Dict, rospy.Message], rospy.Message]
 __all__ = ['lookup_object', 'extract_values', 'populate_instance']
