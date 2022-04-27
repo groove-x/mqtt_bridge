@@ -83,8 +83,8 @@ def mqtt_bridge_node():
         rclpy.spin(mqtt_node)
     except KeyboardInterrupt:
         mqtt_node.get_logger().info('Ctrl-C detected')
-        mqtt_client.disconnect
-        mqtt_client.loop_stop
+        mqtt_client.disconnect()
+        mqtt_client.loop_stop()
 
     mqtt_node.destroy_node()
 
