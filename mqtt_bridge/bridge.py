@@ -20,10 +20,10 @@ def create_bridge(factory: Union[str, "Bridge"], msg_type: str, topic_from: str,
         raise ValueError("factory should be Bridge subclass")
     if isinstance(msg_type, str):
         msg_type = lookup_object(msg_type)
-    """if not issubclass(msg_type, rospy.Message): # replace this with ROS2 once a solution for this esists
-        raise TypeError(
-            "msg_type should be rospy.Message instance or its string"
-            "reprensentation")"""
+    #if not issubclass(msg_type, rospy.Message): # replace this with ROS2 once a solution for this esists
+    #    raise TypeError(
+    #        "msg_type should be rospy.Message instance or its string"
+    #        "reprensentation")
     return factory(
         topic_from=topic_from, topic_to=topic_to, msg_type=msg_type, frequency=frequency, **kwargs)
 

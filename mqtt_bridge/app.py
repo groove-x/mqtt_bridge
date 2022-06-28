@@ -9,10 +9,10 @@ from .util import lookup_object
 
 
 def create_config(mqtt_client, serializer, deserializer, mqtt_private_path):
-    if isinstance(serializer, str):
-        serializer = lookup_object(serializer)
-    if isinstance(deserializer, str):
-        deserializer = lookup_object(deserializer)
+    if isinstance(serializer.value, str):
+        serializer = lookup_object(serializer.value)
+    if isinstance(deserializer.value, str):
+        deserializer = lookup_object(deserializer.value)
     private_path_extractor = create_private_path_extractor(mqtt_private_path)
     def config(binder):
         binder.bind('serializer', serializer)

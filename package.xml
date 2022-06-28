@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>mqtt_bridge</name>
-  <version>0.1.1</version>
+  <version>0.3.0</version>
   <description>The mqtt_bridge package</description>
   <author email="junya.hayashi@groove-x.com">Junya Hayashi</author>
   <author email="kapildeshpande041193@gmail.com">Kapil Deshpande</author>
