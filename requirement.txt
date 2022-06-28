@@ -2,3 +2,4 @@ inject>=4.0
 msgpack-python>=0.4.8
 paho-mqtt>=1.2
 pymongo
+pyyaml

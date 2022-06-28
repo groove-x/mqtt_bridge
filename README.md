@@ -18,7 +18,7 @@ This limitation can be overcome by defining custom bridge class, though.
 
 ```
 $ sudo apt install python3-pip
-$ sudo apt install ros-noetic-rosbridge-library
+$ sudo apt install ros-foxy-rosbridge-library
 $ sudo apt install mosquitto mosquitto-clients
 ```
 
@@ -31,19 +31,19 @@ $ pip3 install -r requirements.txt
 ### launch node
 
 ``` bash
-$ roslaunch mqtt_bridge demo.launch
+$ ros2 launch mqtt_bridge demo.launch.py
 ```
 
 Publish to `/ping`,
 
 ```
-$ rostopic pub /ping std_msgs/Bool "data: true"
+$ ros2 topic pub /ping std_msgs/Bool "data: true"
 ```
 
 and see response to `/pong`.
 
 ```
-$ rostopic echo /pong
+$ ros2 topic echo /pong
 data: True
 ---
 ```
@@ -51,13 +51,13 @@ data: True
 Publish "hello" to `/echo`,
 
 ```
-$ rostopic pub /echo std_msgs/String "data: 'hello'"
+$ ros2 topic pub /echo std_msgs/String "data: 'hello'"
 ```
 
 and see response to `/back`.
 
 ```
-$ rostopic echo /back
+$ ros2 topic echo /back
 data: hello
 ---
 ```
@@ -80,28 +80,25 @@ mqtt:
     host: localhost
     port: 1883
     keepalive: 60
+n_bridge: 2 # specifying number of bridges required
 bridge:
-  # ping pong
-  - factory: mqtt_bridge.bridge:RosToMqttBridge
-    msg_type: std_msgs.msg:Bool
-    topic_from: /ping
-    topic_to: ping
-  - factory: mqtt_bridge.bridge:MqttToRosBridge
-    msg_type: std_msgs.msg:Bool
-    topic_from: ping
-    topic_to: /pong
+            # factory, msg_type, topic_from, topic_to
+  bridge1: ["mqtt_bridge.bridge:RosToMqttBridge","std_msgs.msg:Bool","/ping","ping"]
+  bridge2: ["mqtt_bridge.bridge:MqttToRosBridge","std_msgs.msg:Bool","ping","/pong"]
+  # ros2 parser cannot parse the earlier config type and therefore it has to be changed as above
 ```
 
 you can use any msg types like `sensor_msgs.msg:Imu`.
 
 launch file:
 
-``` xml
-<launch>
-  <node name="mqtt_bridge" pkg="mqtt_bridge" type="mqtt_bridge_node.py" output="screen">
-    <rosparam file="/path/to/config.yaml" command="load" />
-  </node>
-</launch>
+``` python
+# to configure node configs
+config = os.path.join(
+        get_package_share_directory('mqtt_bridge'),
+        'config',
+        'demo_params.yaml'
+        )
 ```
 
 
@@ -140,16 +137,12 @@ deserializer: json:loads
 You can list ROS <--> MQTT tranfer specifications in following format.
 
 ``` yaml
+n_bridge: 2 # specifying number of bridges required
 bridge:
-  # ping pong
-  - factory: mqtt_bridge.bridge:RosToMqttBridge
-    msg_type: std_msgs.msg:Bool
-    topic_from: /ping
-    topic_to: ping
-  - factory: mqtt_bridge.bridge:MqttToRosBridge
-    msg_type: std_msgs.msg:Bool
-    topic_from: ping
-    topic_to: /pong
+            # factory, msg_type, topic_from, topic_to
+  bridge1: ["mqtt_bridge.bridge:RosToMqttBridge","std_msgs.msg:Bool","/ping","ping"]
+  bridge2: ["mqtt_bridge.bridge:MqttToRosBridge","std_msgs.msg:Bool","ping","/pong"]
+  # ros2 parser cannot parse the earlier config type and therefore it has to be changed as above
 ```
 
 * `factory`: bridge class for transfering message from ROS to MQTT, and vise versa.

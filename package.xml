@@ -1,28 +1,22 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>mqtt_bridge</name>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
   <description>The mqtt_bridge package</description>
-
   <author email="junya.hayashi@groove-x.com">Junya Hayashi</author>
+  <author email="kapildeshpande041193@gmail.com">Kapil Deshpande</author>
   <maintainer email="junya.hayashi@groove-x.com">Junya Hayashi</maintainer>
-
   <license>MIT</license>
 
   <url>http://www.ros.org/wiki/mqtt_bridge</url>
 
-  <buildtool_depend>catkin</buildtool_depend>
-  <buildtool_depend>python3-setuptools</buildtool_depend>
-
-  <build_depend>python3-pip</build_depend>
-  <exec_depend>rospy</exec_depend>
-  <exec_depend>rosbridge_library</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-  <!--<exec_depend>python3-msgpack</exec_depend> -->
-  <!--<exec_depend>python3-paho-mqtt</exec_depend> -->
-  <exec_depend>python3-pymongo</exec_depend>
-  <!--<exec_depend>python3-inject</exec_depend> -->
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
 
   <export>
+    <build_type>ament_python</build_type>
   </export>
 </package>
