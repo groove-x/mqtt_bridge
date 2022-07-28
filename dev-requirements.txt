@@ -10,7 +10,7 @@ paho-mqtt>=1.2
 pymongo
 pytest
 pyyaml
-git+https://github.com/RobotWebTools/rosbridge_suite.git#subdirectory=rosbridge_library
+git+https://github.com/RobotWebTools/rosbridge_suite.git@ros1#subdirectory=rosbridge_library
 rosgraph
 rosgraph-msgs
 roslib
