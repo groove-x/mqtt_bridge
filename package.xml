@@ -11,6 +11,13 @@
 
   <url>http://www.ros.org/wiki/mqtt_bridge</url>
 
+  <exec_depend>python-inject-pip</exec_depend>
+  <exec_depend>python3-msgpack</exec_depend>
+  <exec_depend>python3-paho-mqtt</exec_depend>
+  <exec_depend>python3-pymongo</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>rosbridge_library</exec_depend>
+
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
