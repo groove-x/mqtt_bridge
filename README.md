@@ -4,6 +4,8 @@
 
 mqtt_bridge provides a functionality to bridge between ROS and MQTT in bidirectional.
 
+*mqtt_bridge is not actively maintained now. Feel free to check out [mqtt_client](https://github.com/ika-rwth-aachen/mqtt_client), a high-performance C++ ROS nodelet with recent development!*
+
 
 ## Principle
 
