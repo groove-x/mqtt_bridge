@@ -92,7 +92,7 @@ class MqttToRosBridge(Bridge):
                 self._publisher.publish(ros_msg)
                 self._last_published = now
             except Exception as e:
-                self.ros_node.get_logger().error(e)
+                self.ros_node.get_logger().error(str(e))
 
     def _create_ros_message(self, mqtt_msg: mqtt.MQTTMessage): 
         """ create ROS message from MQTT payload """
